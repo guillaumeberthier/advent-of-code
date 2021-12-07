@@ -21,22 +21,22 @@ for i, board in enumerate(boards_desc):
 
 
 def winner(boards, winners):
+    new_winners = []
     for i, board in enumerate(boards[:]):
         if i in winners:
             continue
         for row in board:
             if sum(row) == 5:
-                print(board, winners)
-                return i
+                new_winners.append(i)
+                break
         for col in list(zip(*board)):
             if sum(col) == 5:
-                print(board, winners)
-                return i
-    return -1
+                new_winners.append(i)
+                break
+    return new_winners
 
 
 def score(current, board, shadow_board):
-    print(board, shadow_board)
     score_board = [[y[0] * y[1] for y in zip(x[0], x[1])] for x in zip(board, shadow_board)]
     s = sum([sum(x) for x in board]) - sum([sum(x) for x in score_board])
     return current * s
@@ -59,12 +59,12 @@ def compute_last(bingo):
             if i in winners:
                 continue
             shadow_boards[i][y][x] = 1
-        winner_index = winner(shadow_boards, winners)
-        if winner_index != -1 and winner_index not in winners:
-            winners_index.append((winner_index, cur_entry))
-            winners.add(winner_index)
+        winner_indexes = winner(shadow_boards, winners)
+        if len(winner_indexes) != 0:
+            for i in winner_indexes:
+                winners_index.append((i, cur_entry))
+                winners.add(i)
     last_index, last_entry = winners_index.pop()
-    print(last_index, last_entry)
     return score(last_entry, boards[last_index], shadow_boards[last_index])
 
 
