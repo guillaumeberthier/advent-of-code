@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import sys
-from collections import deque
 
 file_path = str(sys.argv[1])
 f = open(file_path, 'r')
