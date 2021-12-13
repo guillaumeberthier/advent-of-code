@@ -29,37 +29,36 @@ def get_neighbors(node, graph, visited_nodes):
 
 # Part 2
 def get_neighbors_2(node, graph, visited_nodes):
-    forbidden_nodes = set()
-    for visited_node in visited_nodes:
-        if visited_nodes.count(visited_node) > 2:
-            forbidden_nodes.add(visited_node)
-    forbidden_nodes.add('start')
-    twice_nodes = set(filter(lambda x: visited_nodes.count(x) == 2, visited_nodes))
-    twice_nodes_scenarios = [twice_nodes.difference(x) for x in twice_nodes]
-    if twice_nodes_scenarios:
-        forbidden = [forbidden_nodes.union(x) for x in twice_nodes_scenarios]
-        result = []
-        for forb in forbidden:
-            result.append([x for x in graph[node] if x not in forb or x.isupper()])
-        return result
-    else:
-        forbidden = forbidden_nodes.copy()
-        return [[x for x in graph[node] if x not in forbidden or x.isupper()]]
+    candidates = []
+    for candidate in graph[node]:
+        if candidate == 'start':
+            continue
+        elif candidate.isupper():
+            candidates.append(candidate)
+        elif candidate == 'end':
+            candidates.append(candidate)
+        elif visited_nodes.count(candidate) == 0:
+            candidates.append(candidate)
+        elif visited_nodes.count(candidate) == 1:
+            twice_minus = [item for item in visited_nodes if visited_nodes.count(item) > 1 and item.islower() and item]
+            if len(twice_minus) == 0:
+                candidates.append(candidate)
+    return candidates
 
 
-part1_solutions = set()
+solutions = set()
 
 
 def get_all_paths(source, destination, graph, visited_nodes, path):
     visited_nodes.append(source)
     path.append(source)
     if source == destination:
-        part1_solutions.add(','.join(path))
+        solutions.add(','.join(path))
         return
-    neighbors = get_neighbors(source, graph, visited_nodes)
+    neighbors = get_neighbors_2(source, graph, visited_nodes)
     for neighbor in neighbors:
         get_all_paths(neighbor, destination, graph, visited_nodes.copy(), path.copy())
 
 
 get_all_paths('start', 'end', graph, [], [])
-print(len(part1_solutions))
+print(len(solutions))
