@@ -67,9 +67,9 @@ def fold(axis, value, dots):
 def print_board(dots):
     min_x, min_y = get_min_x(dots), get_min_y(dots)
     max_x, max_y = get_max_x(dots), get_max_y(dots)
-    board = [['.' for _ in range(max_x - min_x + 1)] for _ in range(max_y - min_y + 1)]
+    board = [[' ' for _ in range(max_x - min_x + 1)] for _ in range(max_y - min_y + 1)]
     for dot in dots:
-        board[dot[1] + min_y][dot[0] + min_x] = '#'
+        board[dot[1] + min_y][dot[0] + min_x] = '@'
     for row in board:
         print(''.join(row))
 
